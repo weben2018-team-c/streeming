@@ -14,13 +14,11 @@ class Tracks(models.Model):
 
 
 class Users(models.Model):
-    name = models.TextField()
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    username = models.TextField()
 
     class Meta:
         managed = False
-        db_table = 'users'
+        db_table = 'auth_user'
 
 
 class Releases(models.Model):

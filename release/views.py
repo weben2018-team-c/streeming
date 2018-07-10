@@ -6,7 +6,6 @@ from django.shortcuts import redirect
 from .models import Releases, Tracks, Users
 
 
-# Create your views here.
 @login_required
 def index(request):
     user = request.user

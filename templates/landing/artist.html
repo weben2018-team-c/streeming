@@ -46,11 +46,15 @@
             <!-- Jumbotron Header -->
             <header class="jumbotron my-4">
                 <div class="row">
-                    <div class="col-md-2"> <img src="{% static 'img/user/placeholder.png' %}" alt="User Image" width=100%></div>
+                    <div class="col-md-2"> <img src="{% static 'img/user/placeholder.png' %}" alt="User Image" width="100%"></div>
                     <div class="col-md-10">
                         <h1 class="display-3">{{ artist.username }}</h1>
                         {% if user.username %}
-                            <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#subscribeModal" style="float:right">このアーティストをフォロー</button>
+                            {% if subscribed %}
+                                <button class="btn btn-primary btn-lg" onclick="location.href='play'" style="float:right">フォロー中 (いますぐ聴く)</button>
+                            {% else %}
+                                <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#subscribeModal" style="float:right">このアーティストをフォロー</button>
+                            {% endif %}
                         {% else %}
                             <button class="btn btn-primary btn-lg" onclick="location.href='accounts/login?next={{ request.path }}?artist_id={{ artist.id }}'" style="float:right">このアーティストをフォロー</button>
                         {% endif %}
@@ -70,6 +74,28 @@
                             <input type="hidden" name="artist_id" value="{{ artist.id }}">
                             <div class="modal-body">
                                 <div class="box-body">
+                                    <div style="text-align:center"><img src="{% static 'img/user/placeholder.png' %}" alt="User Image" width="30%"></div>
+                                    <h4>{{ artist.username }}をフォローする</h4>
+                                    Streetで{{ artist.username }}をいますぐ応援しよう！
+                                    <fieldset class="form-group">
+                                        <div class="row">
+                                            <legend class="col-form-label col-sm-2 pt-0">プラン</legend>
+                                            <div class="col-sm-10">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="100" checked>
+                                                    <label class="form-check-label" for="gridRadios1">全曲聴きホーダイ (¥100/月)</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="150">
+                                                    <label class="form-check-label" for="gridRadios2">全曲聴きホーダイ+最新情報配信 (¥150/月)</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="250">
+                                                    <label class="form-check-label" for="gridRadios3">全曲聴きホーダイ+ステッカープレゼント (¥250/月)</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
                                 </div>
                             </div>
                             <div class="modal-footer">

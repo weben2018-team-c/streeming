@@ -1,0 +1,93 @@
+{% extends 'adminlte/base.html' %}
+
+{% block title %}リリース楽曲の管理 | Streeming{% endblock %}
+
+{% block page_name %}リリース楽曲の管理{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">リリース楽曲</h3>
+                <div class="box-tools">
+                    <div class="input-group" style="width: 150px;">
+                        <div class="input-group-btn">
+                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#newReleaseModal">新規楽曲の公開</button>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+                <table class="table table-hover">
+                    <tr>
+                        <th>再生</th>
+                        <th>楽曲タイトル</th>
+                        <th>公開日</th>
+                        <th>フォロー数</th>
+                        <th>ステータス</th>
+                        <th>編集</th>
+                    </tr>
+                    {% for release in releases %}
+                        <div>
+                            <td align="center"><a><i class="fa fa-fw fa-play-circle-o"></i></a></td>
+                            <td>{{ release.track.title }}</td>
+                            <td>{{ release.track.created_at }}</td>
+                            <td>1404</td>
+                            {% if release.enabled %}
+                                <td align="center"><span class="label label-success">公開中</span></td>
+                            {% else %}
+                                <td align="center"><span class="label label-danger">停止中</span></td>
+                            {% endif %}
+                            <td  align="center"><a><i class="fa fa-fw fa-pencil"></i></a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>
+
+<!-- modal -->
+<div class="modal fade" id="newReleaseModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">新規楽曲の公開</h4>
+            </div>
+            <form action="/release/register" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="inputTitle">タイトル</label>
+                            <input type="text" class="form-control" name="title" id="inputTitle" placeholder="タイトル">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputDescription">楽曲の説明</label>
+                            <input type="text" class="form-control" name="description" id="inputDescription" placeholder="楽曲の説明">
+                        </div>
+                        <div class="form-group">
+                            <label for="thumbnailfile">サムネイル</label>
+                            <input type="file" id="thumbnailfile">
+                        </div>
+                        <div class="form-group">
+                            <label for="musicfile">楽曲ファイル</label>
+                            <input type="file" id="musicfile">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">キャンセル</button>
+                    <button type="submit" class="btn btn-primary">公開</button>
+                </div>
+            </form>
+            </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+{% endblock %}

@@ -186,3 +186,4 @@ venv.bak/
 
 # End of https://www.gitignore.io/api/django,python,pycharm
 
+settings.py

@@ -1,0 +1,8 @@
+CREATE TABLE subscribes
+(id serial,
+user_id INTEGER NOT NULL,
+artist_id INTEGER NOT NULL,
+enabled BOOLEAN NOT NULL DEFAULT TRUE,
+created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+PRIMARY KEY (user_id, artist_id));

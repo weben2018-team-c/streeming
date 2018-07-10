@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title>{{ artist.username }} | 自分だけのお気に入りの音楽を見つけよう</title>
+
+        <!-- Bootstrap core CSS -->
+        <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+        <!-- Custom styles for this template -->
+        <link href="{% static 'css/heroic-features.css' %}" rel="stylesheet">
+    </head>
+
+    <body>
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="/"><i>Streeming</i></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item"><a class="nav-link" href="/">ホーム</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/play">楽曲を聴く</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/release">楽曲を公開する</a></li>
+                        {% if user.username %}
+                            <li class="nav-item"><a class="nav-link" href="/accounts/logout">ログアウト</a></li>
+                        {% else %}
+                            <li class="nav-item"><a class="nav-link" href="/accounts/login">ログイン</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/accounts/signup">新規登録</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page Content -->
+        <div class="container">
+            <!-- Jumbotron Header -->
+            <header class="jumbotron my-4">
+                <div class="row">
+                    <div class="col-md-2"> <img src="{% static 'img/user/placeholder.png' %}" alt="User Image" width="100%"></div>
+                    <div class="col-md-10">
+                        <h1 class="display-3">{{ artist.username }}</h1>
+                        {% if user.username %}
+                            {% if subscribed %}
+                                <button class="btn btn-primary btn-lg" onclick="location.href='play'" style="float:right">フォロー中 (いますぐ聴く)</button>
+                            {% else %}
+                                <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#subscribeModal" style="float:right">このアーティストをフォロー</button>
+                            {% endif %}
+                        {% else %}
+                            <button class="btn btn-primary btn-lg" onclick="location.href='accounts/login?next={{ request.path }}?artist_id={{ artist.id }}'" style="float:right">このアーティストをフォロー</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </header>
+            <!-- modal -->
+            <div class="modal fade" id="subscribeModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <form action="/play/subscribe" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="artist_id" value="{{ artist.id }}">
+                            <div class="modal-body">
+                                <div class="box-body">
+                                    <div style="text-align:center"><img src="{% static 'img/user/placeholder.png' %}" alt="User Image" width="30%"></div>
+                                    <h4>{{ artist.username }}をフォローする</h4>
+                                    Streetで{{ artist.username }}をいますぐ応援しよう！
+                                    <fieldset class="form-group">
+                                        <div class="row">
+                                            <legend class="col-form-label col-sm-2 pt-0">プラン</legend>
+                                            <div class="col-sm-10">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="100" checked>
+                                                    <label class="form-check-label" for="gridRadios1">全曲聴きホーダイ (¥100/月)</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="150">
+                                                    <label class="form-check-label" for="gridRadios2">全曲聴きホーダイ+最新情報配信 (¥150/月)</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="250">
+                                                    <label class="form-check-label" for="gridRadios3">全曲聴きホーダイ+ステッカープレゼント (¥250/月)</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">キャンセル</button>
+                                <button type="submit" class="btn btn-primary">フォローする</button>
+                            </div>
+                        </form>
+                        </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+            <!-- Page Features -->
+            <div class="row text-center">
+                {% for release in releases %}
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="card">
+                            <img class="card-img-top" src="{% static 'img/thumbnail/'%}{{ release.track.id }}.png" alt="{{ release.track.title }}">
+                            <div class="card-body">
+                                <h4 class="card-title">{{ release.track.title }}</h4>
+                                <p class="card-text">
+                                    {% if release.track.description %}
+                                        {{ release.track.description }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+
+        <!-- Footer -->
+        <footer class="py-5 bg-dark">
+            <div class="container">
+                <p class="m-0 text-center text-white">Copyright &copy; Streeming 2018</p>
+            </div>
+            <!-- /.container -->
+        </footer>
+
+        <!-- Bootstrap core JavaScript -->
+        <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+        <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+      </body>
+</html>

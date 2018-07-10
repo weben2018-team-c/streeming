@@ -1,0 +1,8 @@
+CREATE TABLE releases
+(id serial,
+user_id INTEGER NOT NULL,
+track_id INTEGER NOT NULL,
+enabled BOOLEAN NOT NULL DEFAULT TRUE,
+created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+PRIMARY KEY (track_id));

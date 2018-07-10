@@ -3,7 +3,6 @@
 <html lang="en">
 
   <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -16,17 +15,15 @@
 
     <!-- Custom styles for this template -->
     <link href="{% static 'css/heroic-features.css' %}" rel="stylesheet">
-
   </head>
 
   <body>
-
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
         <a class="navbar-brand" href="/"><i>Streeming</i></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
@@ -41,9 +38,18 @@
             <li class="nav-item">
               <a class="nav-link" href="/release">楽曲を公開する</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/accounts/login">ログイン</a>
-            </li>
+            {% if user.username %}
+              <li class="nav-item">
+                <a class="nav-link" href="/accounts/logout">ログアウト</a>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="/accounts/login">ログイン</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/accounts/signup">新規登録</a>
+              </li>
+            {% endif %}
           </ul>
         </div>
       </div>
@@ -58,19 +64,53 @@
 
       <!-- Page Features -->
       <div class="row text-center">
+        {% for release in releases %}
+          <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card">
+              <img class="card-img-top" src="{% static 'img/thumbnail/'%}{{ release.track.id }}.png" alt="{{ release.track.title }}">
+              <div class="card-body">
+                <h4 class="card-title">{{ release.track.title }}</h4>
 
-        <div class="col-lg-3 col-md-6 mb-4">
-          <div class="card">
-            <img class="card-img-top" src="{% static 'img/thumbnail/1.png' %}" alt="">
-            <div class="card-body">
-              <h4 class="card-title">Card title</h4>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
-            </div>
-            <div class="card-footer">
-              <a href="/" class="btn btn-primary">フォローする</a>
+                <p class="card-text">
+                  <b>{{ release.user.username }}</b><br>
+                  {% if release.track.description %}
+                    {{ release.track.description }}
+                  {% endif %}
+                </p>
+              </div>
+              <div class="card-footer">
+                  <button class="btn btn-primary" data-toggle="modal" data-target="#subscribeModal">この曲を聴く</button>
+              </div>
             </div>
           </div>
-        </div>
+          <!-- modal -->
+          <div class="modal fade" id="subscribeModal">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span></button>
+                      </div>
+                      <form action="/" method="post">
+                          <div class="modal-body">
+                          </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-default pull-left" data-dismiss="modal">キャンセル</button>
+                              <button type="submit" class="btn btn-primary">アーティストをフォロー</button>
+                          </div>
+                      </form>
+                      </div>
+                  <!-- /.modal-content -->
+              </div>
+              <!-- /.modal-dialog -->
+          </div>
+          <!-- /.modal -->
+
+
+
+
+
+        {% endfor %}
       </div>
       <!-- /.row -->
 

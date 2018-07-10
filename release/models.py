@@ -3,7 +3,6 @@ from datetime import datetime
 import pytz
 
 
-# Create your models here.
 class Tracks(models.Model):
     title = models.TextField()
     description = models.TextField(blank=True, null=True)

@@ -1,9 +1,9 @@
 from django.http import HttpResponse
 from django.template import loader
+from django.shortcuts import redirect
 
-from release.models import Releases
-
-TRACKS_LIMIT = 20
+from .models import Releases, Users
+from streeming.settings import TRACKS_LIMIT
 
 
 def index(request):
@@ -13,3 +13,18 @@ def index(request):
     }
     template = loader.get_template('landing/index.html')
     return HttpResponse(template.render(context, request))
+
+
+def show_artist_detail(request):
+    if 'artist_id' in request.GET:
+        artist_id = request.GET.get('artist_id')
+        artist = Users.objects.get(id=artist_id)
+        releases = Releases.objects.filter(user__id=artist_id)
+        context = {
+            'artist': artist,
+            'releases': releases
+        }
+        template = loader.get_template('landing/artist.html')
+        return HttpResponse(template.render(context, request))
+    else:
+        return redirect("/")

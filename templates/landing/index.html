@@ -33,7 +33,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/">楽曲を聴く</a>
+              <a class="nav-link" href="/play">楽曲を聴く</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/release">楽曲を公開する</a>
@@ -72,44 +72,17 @@
                 <h4 class="card-title">{{ release.track.title }}</h4>
 
                 <p class="card-text">
-                  <b>{{ release.user.username }}</b><br>
+                  <b><a href="/artist?artist_id={{ release.user.id }}">{{ release.user.username }}</a></b><br>
                   {% if release.track.description %}
                     {{ release.track.description }}
                   {% endif %}
                 </p>
               </div>
               <div class="card-footer">
-                  <button class="btn btn-primary" data-toggle="modal" data-target="#subscribeModal">この曲を聴く</button>
+                  <a href="/artist?artist_id={{ release.user.id }}" class="btn btn-primary btn-lg">この曲を聴く</a>
               </div>
             </div>
           </div>
-          <!-- modal -->
-          <div class="modal fade" id="subscribeModal">
-              <div class="modal-dialog">
-                  <div class="modal-content">
-                      <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span></button>
-                      </div>
-                      <form action="/" method="post">
-                          <div class="modal-body">
-                          </div>
-                          <div class="modal-footer">
-                              <button type="button" class="btn btn-default pull-left" data-dismiss="modal">キャンセル</button>
-                              <button type="submit" class="btn btn-primary">アーティストをフォロー</button>
-                          </div>
-                      </form>
-                      </div>
-                  <!-- /.modal-content -->
-              </div>
-              <!-- /.modal-dialog -->
-          </div>
-          <!-- /.modal -->
-
-
-
-
-
         {% endfor %}
       </div>
       <!-- /.row -->
